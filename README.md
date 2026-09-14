@@ -1,1 +1,2 @@
 # NeuralNetwokFromStratch
+this project will be able to classify imeges of hand written digits using a neural network create from strach by a command line tool. The input image will be resized and divied into input nodes than tge probobility of each output node will be displayed.
