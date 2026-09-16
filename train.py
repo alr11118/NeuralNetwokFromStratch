@@ -19,7 +19,7 @@ def softmax(outputs):
 
 
 # FORWARD PASS
-def forwardPass(input, hiddenWeights, hiddenBiases, outputWeights, outputBias):
+def forwardPass(input, hiddenWeights, hiddenBiases, outputWeights, outputBiases):
     hiddenZ = []
     hiddenOutputs = []
     for i in range(len(hiddenWeights)):
@@ -30,11 +30,17 @@ def forwardPass(input, hiddenWeights, hiddenBiases, outputWeights, outputBias):
         hiddenZ.append(z)
         hiddenOutputs.append(relu(z))
 
-    prediction = 0
-    for i in range(len(hiddenOutputs)):
-        prediction += hiddenOutputs[i] * outputWeights[i]
-    prediction += outputBias
-    return prediction, hiddenOutputs, hiddenZ
+    rawOutputs = []
+    for i in range(len(outputWeights)):
+        output = 0
+        for j in range(len(hiddenOutputs)):
+            output += hiddenOutputs[j] * outputWeights[i][j]
+        output += outputBiases[i]
+        rawOutputs.append(output)
+
+    probabilities = softmax(rawOutputs)
+
+    return probabilities, hiddenOutputs, hiddenZ
 
 # LOSS
 def lossFunction(error):
