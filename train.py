@@ -51,26 +51,20 @@ def backwardPass(input, target, probabilities,
                  hiddenWeights, hiddenBiases,
                  outputWeights, outputBiases, 
                  d_rawOutputs):
-    # Gradients start at zero
+    # Set Gradients to 0
+    # Note: d means how much the loss changes with respect to the next thing
     d_outputWeights = [
         [0] * len(hiddenOutputs)
         for _ in range(len(outputWeights))
     ]
     d_outputBiases = [0] * len(outputBiases)
-
     d_hiddenWeights = [
         [0] * len(input)
         for _ in range(len(hiddenWeights))
     ]
     d_hiddenBiases = [0] * len(hiddenBiases)
 
-    # Calculate prediction error
-    #error = prediction - target
     loss = lossFunction(probabilities, target)    
-    # Note: d means how much the loss changes with respect to the next thing
-    
-    # Calculate how the loss changes with prediction
-    #d_prediction = 2 * error
 
     # OUPUT LAYER
     # Calculate output-layer gradients
@@ -87,7 +81,7 @@ def backwardPass(input, target, probabilities,
         dah = 0
         for p in range(len(d_rawOutputs)):
             dah += d_rawOutputs[p] * outputWeights[p][i]
-        d_hiddenOutput = dah * (1 if hiddenZ[i] > 0 else 0)
+        d_hiddenOutput = dah * (1 if hiddenZ[i] > 0 else 0) # Check if relu was activated
         for j in range(len(input)):
             d_hiddenWeights[i][j] += d_hiddenOutput * input[j]
         d_hiddenBiases[i] += d_hiddenOutput
@@ -159,6 +153,7 @@ def train(x, y,
                 d_rawOutputs
             )
 
+            # Update Gradients and Loss
             loss += exampleLoss
 
             # Update Gradients
@@ -175,7 +170,8 @@ def train(x, y,
 
             for i in range(len(hiddenBiases)):
                 d_hiddenBiases[i] += example_d_hiddenBiases[i]
-        # Average loss and gradient s
+
+        # Average loss and gradients
         loss /= len(x)
 
         for i in range(len(outputWeights)):
