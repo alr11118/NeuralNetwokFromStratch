@@ -1,20 +1,20 @@
 import math
 import random
+import MINST_loader
 
 # ACTIVATION FUNCTIONS
 def relu(x):
     return max(0, x)
 
 def softmax(outputs):
-    total = 0
+    maxOutput = max(outputs)
+    expOutputs = []
+    for output in outputs:
+        expOutputs.append(math.exp(output - maxOutput))
+    total = sum(expOutputs)
     probabilities = []
-
-    for output in outputs:
-        total += math.exp(output)
-
-    for output in outputs:
-        probabilities.append(math.exp(output) / total)
-
+    for expOutput in expOutputs:
+        probabilities.append(expOutput / total)
     return probabilities
 
 # FORWARD PASS
@@ -251,20 +251,12 @@ def initializeNetwork(inputSize, hiddenSize, outputSize):
  outputBiases) = initializeNetwork(784, 64, 10)
 
 # Training data
-x = [
-    [2, 5],   # class 0
-    [3, 1],   # class 1
-    [4, 7],   # class 2
-    [1, 2]    # class 1
-]
+x_full = MINST_loader.loadImages("MINST/train-images.idx3-ubyte")
+y_full = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte")
 
-y = [
-    0,
-    1,
-    2,
-    1
-]
-
+# Use the first ten for fast testing/development of train()
+x = x_full[:10]
+y = y_full[:10]
 
 # TRAIN
 hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = train(
@@ -272,12 +264,31 @@ hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = tra
     hiddenWeights, hiddenBiases,
     outputWeights, outputBiases,
     lr=0.01,
-    maxIterations=10000
+    maxIterations=100
 )
 
+print("\nTraining complete!")
 print("Final loss:", loss)
 print("Iterations:", iterations)
 
+# TEST
+probabilities = predict(
+        x[0],
+        hiddenWeights,
+        hiddenBiases,
+        outputWeights,
+        outputBiases
+    )
+predictedClass = probabilities.index(max(probabilities))
+
+print(
+    #"Input:", x[0],
+    "Target:", y[0],
+    "Probabilities:", probabilities,
+    "Predicted class:", predictedClass
+)
+
+"""
 print("\nHidden weights:", hiddenWeights)
 print("Hidden biases:", hiddenBiases)
 print("Output weights:", outputWeights)
@@ -307,16 +318,5 @@ for i in range(len(x)):
 
 
 # TEST NEW INPUT
-probabilities = predict(
-    [2, 3],
-    hiddenWeights,
-    hiddenBiases,
-    outputWeights,
-    outputBiases
-)
+"""
 
-predictedClass = probabilities.index(max(probabilities))
-
-print("\nFor [2, 3]:")
-print("Probabilities:", probabilities)
-print("Predicted class:", predictedClass)
