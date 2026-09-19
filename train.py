@@ -1,4 +1,5 @@
 import math
+import random
 
 # ACTIVATION FUNCTIONS
 def relu(x):
@@ -217,36 +218,37 @@ def predict(input,
             hiddenBiases,
             outputWeights,
             outputBiases):
-    probobilities, _, _ = forwardPass(
+    probabilities, _, _ = forwardPass(
         input,
         hiddenWeights,
         hiddenBiases,
         outputWeights,
         outputBiases
     )
-    return probobilities
+    return probabilities
+
+def initializeNetwork(inputSize, hiddenSize, outputSize):
+    # Example: initializeNetwork(784, 64, 10)
+    # 64 Hidden Neurans with 784 inputs each
+    hiddenWeights = [
+        [random.uniform(-0.1, 0.1) for _ in range(inputSize)]
+        for _ in range(hiddenSize)
+    ]
+    hiddenBiases = [0] * hiddenSize
+    # 10 Output neurons for 10 classses
+    outputWeights = [
+        [random.uniform(-0.1, 0.1) for _ in range(hiddenSize)]
+        for _ in range(outputSize)
+    ] 
+    outputBiases = [0] * outputSize
+    return (hiddenWeights, hiddenBiases, 
+            outputWeights, outputBiases)
 
 # MAIN / DATA
-
-# 3 hidden neurons, 2 inputs each
-hiddenWeights = [
-    [0.1, -0.1],
-    [0.1,  0.1],
-    [-0.1, 0.1]
-]
-
-hiddenBiases = [0.1, 0.1, 0.1]
-
-
-# 3 output neurons, 3 hidden inputs each
-outputWeights = [
-    [0.1, -0.1,  0.1],   # output/class 0
-    [0.1,  0.1, -0.1],   # output/class 1
-    [-0.1, 0.1,  0.1]    # output/class 2
-]
-
-outputBiases = [0.1, 0.1, 0.1]
-
+(hiddenWeights, 
+ hiddenBiases, 
+ outputWeights, 
+ outputBiases) = initializeNetwork(784, 64, 10)
 
 # Training data
 x = [
