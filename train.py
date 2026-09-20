@@ -1,6 +1,7 @@
 import math
 import random
 import MINST_loader
+import json
 
 # ACTIVATION FUNCTIONS
 def relu(x):
@@ -278,61 +279,45 @@ def initializeNetwork(inputSize, hiddenSize, outputSize):
     return (hiddenWeights, hiddenBiases, 
             outputWeights, outputBiases)
 
-def test(inputs, outputs,
-         hiddenWeights, hiddenBiases,
-         outputWeights, outputBiases):
-    correct = 0
-    for i in range(len(inputs)):
-        probabilities = predict(
-            inputs[i],
-            hiddenWeights,
-            hiddenBiases,
-            outputWeights,
-            outputBiases
+def saveWeights(filePath, hiddenWeights,hiddenBiases,
+                outputWeights,outputBiases):
+    data = {
+        "hiddenWeights": hiddenWeights,
+        "hiddenBiases": hiddenBiases,
+        "outputWeights": outputWeights,
+        "outputBiases": outputBiases
+    }
+
+    with open(filePath, "w") as file:
+        json.dump(data, file, indent=4)
+
+def main():
+    (hiddenWeights, 
+    hiddenBiases, 
+    outputWeights, 
+    outputBiases) = initializeNetwork(784, 64, 10)
+
+    # Training data
+    numData = 500
+    x = MINST_loader.loadImages("MINST/train-images.idx3-ubyte", numData)
+    y = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte", numData)
+
+    # TRAIN
+    hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = train(
+        x, y,
+        hiddenWeights, hiddenBiases,
+        outputWeights, outputBiases,
+        lr=0.01,
+        maxIterations = 20,
+        batchSize = 10
         )
-        predictedClass = probabilities.index(max(probabilities))
-        if predictedClass == outputs[i]:
-            correct += 1
 
-    return (f"Accuracy: {correct}/{len(inputs)} ({correct / len(inputs) * 100:.2f}%)")
+    print("\nTraining complete!")
+    print("Final loss:", loss)
+    print("Iterations:", iterations)
 
-# MAIN / DATA
-(hiddenWeights, 
- hiddenBiases, 
- outputWeights, 
- outputBiases) = initializeNetwork(784, 64, 10)
+    saveWeights("model/weights.json", hiddenWeights, hiddenBiases, outputWeights, outputBiases)
+    print("Weights saved")
 
-# Training data
-numData = 500
-x = MINST_loader.loadImages("MINST/train-images.idx3-ubyte", numData)
-y = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte", numData)
-
-# TRAIN
-hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = train(
-    x, y,
-    hiddenWeights, hiddenBiases,
-    outputWeights, outputBiases,
-    lr=0.01,
-    maxIterations = 20,
-    batchSize = 10
-    )
-
-print("\nTraining complete!")
-print("Final loss:", loss)
-print("Iterations:", iterations)
-
-# TEST
-print("Testing...")
-x_test = MINST_loader.loadImages(
-    "MINST/t10k-images.idx3-ubyte",
-    1000
-)
-
-y_test = MINST_loader.loadLabels(
-    "MINST/t10k-labels.idx1-ubyte",
-    1000
-)
-print(test(x_test, y_test, 
-         hiddenWeights,hiddenBiases,
-         outputWeights,outputBiases))
-
+if(__name__ == "__main__"):
+    main()
