@@ -107,7 +107,7 @@ def train(x, y,
         loss = 0
 
         # Prepare small bathes
-        batchSize = 10
+        batchSize = 20
         for batchIndex in range(len(x) // batchSize):
             start = batchIndex * batchSize
             end = start + batchSize
@@ -241,16 +241,20 @@ def predict(input,
 def initializeNetwork(inputSize, hiddenSize, outputSize):
     # Example: initializeNetwork(784, 64, 10)
     # 64 Hidden Neurans with 784 inputs each
+    # Using Kaiming Initialization for optimization
+    scale = math.sqrt(2 / inputSize)
     hiddenWeights = [
-        [random.uniform(-0.1, 0.1) for _ in range(inputSize)]
+        [random.gauss(0, scale) for _ in range(inputSize)]
         for _ in range(hiddenSize)
     ]
     hiddenBiases = [0] * hiddenSize
+
     # 10 Output neurons for 10 classses
+    scale = math.sqrt(2 / hiddenSize)
     outputWeights = [
-        [random.uniform(-0.1, 0.1) for _ in range(hiddenSize)]
+        [random.gauss(0, scale) for _ in range(hiddenSize)]
         for _ in range(outputSize)
-    ] 
+    ]
     outputBiases = [0] * outputSize
     return (hiddenWeights, hiddenBiases, 
             outputWeights, outputBiases)
@@ -262,12 +266,9 @@ def initializeNetwork(inputSize, hiddenSize, outputSize):
  outputBiases) = initializeNetwork(784, 64, 10)
 
 # Training data
-x_full = MINST_loader.loadImages("MINST/train-images.idx3-ubyte")
-y_full = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte")
-
-# Use the first ten for fast testing/development of train()
-x = x_full[:500]
-y = y_full[:500]
+numData = 500
+x = MINST_loader.loadImages("MINST/train-images.idx3-ubyte", numData)
+y = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte", numData)
 
 # TRAIN
 hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = train(

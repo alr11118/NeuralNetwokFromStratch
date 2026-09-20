@@ -1,4 +1,4 @@
-def loadImages(filename):
+def loadImages(filename, batchSize = 0):
     with open(filename, "rb") as file:
         data = file.read()
 
@@ -6,6 +6,9 @@ def loadImages(filename):
     numImages = int.from_bytes(data[4:8], byteorder="big")
     numRows = int.from_bytes(data[8:12], byteorder="big")
     numColumns = int.from_bytes(data[12:16], byteorder="big")
+
+    if(batchSize == 0):
+        batchSize = numImages
 
     """
     print(magic)
@@ -15,7 +18,7 @@ def loadImages(filename):
     """
 
     images = []
-    for imageIndex in range(numImages):
+    for imageIndex in range(batchSize):
         image = []
         for pixelIndex in range(numRows * numColumns):
             index = 16 + imageIndex * (numRows * numColumns) + pixelIndex
@@ -27,12 +30,15 @@ def loadImages(filename):
 # Example Usage:
 #images = loadImages("MINST/train-images.idx3-ubyte")
 
-def loadLabels(filename):
+def loadLabels(filename, batchSize = 0):
     with open(filename, "rb") as file:
         data = file.read()
 
     magic = int.from_bytes(data[0:4], byteorder="big")
     numLabels = int.from_bytes(data[4:8], byteorder="big")
+
+    if(batchSize == 0):
+        batchSize = numLabels
 
     """
     print("Magic:", magic)
@@ -40,7 +46,7 @@ def loadLabels(filename):
     """
 
     labels = []
-    for labelIndex in range(numLabels):
+    for labelIndex in range(batchSize):
         index = 8 + labelIndex
         value = data[index]
         labels.append(value)
