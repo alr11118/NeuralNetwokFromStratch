@@ -99,49 +99,60 @@ def backwardPass(input, target, probabilities,
 def train(x, y,
           hiddenWeights, hiddenBiases,
           outputWeights, outputBiases,
-          lr, maxIterations):
+          lr, maxIterations,
+          batchSize):
+
     loss = float("inf")
     iterations = 0
-    while loss > 0.000001 and iterations < maxIterations:
+
+    while loss > 0.0000001 and iterations < maxIterations:
         iterations += 1
-        loss = 0
 
-        # Prepare small bathes
-        batchSize = 20
-        for batchIndex in range(len(x) // batchSize):
-            start = batchIndex * batchSize
-            end = start + batchSize
+        # Shuffle training data each iteration/epoch
+        indices = list(range(len(x)))
+        random.shuffle(indices)
 
-            x_batch = x[start:end]
-            y_batch = y[start:end]
+        totalLoss = 0
 
-            # Reseet Gradients before each batch
+        # Process mini-batches
+        for batchStart in range(0, len(x), batchSize):
+
+            batchIndices = indices[
+                batchStart:batchStart + batchSize
+            ]
+
+            # Reset gradients for this mini-batch
             d_outputWeights = [
                 [0] * len(hiddenWeights)
                 for _ in range(len(outputWeights))
             ]
             d_outputBiases = [0] * len(outputBiases)
+
             d_hiddenWeights = [
                 [0] * len(x[0])
                 for _ in range(len(hiddenWeights))
             ]
             d_hiddenBiases = [0] * len(hiddenBiases)
+
             batchLoss = 0
-            # Process each training example
-            for x_index in range(len(x_batch)):
+
+            # Process examples in this mini-batch
+            for x_index in batchIndices:
 
                 # Forward pass
                 probabilities, hiddenOutputs, hiddenZ = forwardPass(
-                    x_batch[x_index],
+                    x[x_index],
                     hiddenWeights,
                     hiddenBiases,
                     outputWeights,
                     outputBiases
                 )
+
+                # Softmax + cross-entropy derivative
                 d_rawOutputs = [0] * len(probabilities)
 
                 for i in range(len(probabilities)):
-                    d_rawOutputs[i] = probabilities[i] - (1 if i == y_batch[x_index] else 0)
+                    d_rawOutputs[i] = probabilities[i] - (1 if i == y[x_index] else 0)
 
                 # Backward pass
                 (
@@ -151,22 +162,21 @@ def train(x, y,
                     example_d_hiddenWeights,
                     example_d_hiddenBiases
                 ) = backwardPass(
-                    x_batch[x_index],
-                    y_batch[x_index],
+                    x[x_index],
+                    y[x_index],
                     probabilities,
                     hiddenOutputs,
                     hiddenZ,
                     hiddenWeights,
                     hiddenBiases,
                     outputWeights,
-                    outputBiases, 
+                    outputBiases,
                     d_rawOutputs
                 )
 
-                # Update Gradients and Loss
                 batchLoss += exampleLoss
 
-                # Update Gradients
+                # Add example gradients to batch gradients
                 for i in range(len(outputWeights)):
                     for j in range(len(outputWeights[i])):
                         d_outputWeights[i][j] += example_d_outputWeights[i][j]
@@ -175,31 +185,30 @@ def train(x, y,
                     d_outputBiases[i] += example_d_outputBiases[i]
 
                 for i in range(len(hiddenWeights)):
-                    for j in range(len(x_batch[x_index])):
+                    for j in range(len(x[x_index])):
                         d_hiddenWeights[i][j] += example_d_hiddenWeights[i][j]
-
                 for i in range(len(hiddenBiases)):
                     d_hiddenBiases[i] += example_d_hiddenBiases[i]
 
-            # Average loss and gradients
-            batchLoss /= len(x_batch)
-            loss += batchLoss
+            # Number of examples actually in this batch
+            currentBatchSize = len(batchIndices)
 
+            # Average gradients over the mini-batch
             for i in range(len(outputWeights)):
                 for j in range(len(outputWeights[i])):
-                    d_outputWeights[i][j] /= len(x_batch)
+                    d_outputWeights[i][j] /= currentBatchSize
 
             for i in range(len(outputBiases)):
-                d_outputBiases[i] /= len(x_batch)
+                d_outputBiases[i] /= currentBatchSize
 
             for i in range(len(hiddenWeights)):
                 for j in range(len(hiddenWeights[i])):
-                    d_hiddenWeights[i][j] /= len(x_batch)
+                    d_hiddenWeights[i][j] /= currentBatchSize
 
             for i in range(len(hiddenBiases)):
-                d_hiddenBiases[i] /= len(x_batch)
+                d_hiddenBiases[i] /= currentBatchSize
 
-            # Update Weights and Biases
+            # Update weights immediately after each mini-batch
             for i in range(len(outputWeights)):
                 for j in range(len(outputWeights[i])):
                     outputWeights[i][j] -= lr * d_outputWeights[i][j]
@@ -213,7 +222,17 @@ def train(x, y,
 
             for i in range(len(hiddenBiases)):
                 hiddenBiases[i] -= lr * d_hiddenBiases[i]
-    loss /= (len(x)/batchSize)
+
+            # Track loss
+            totalLoss += batchLoss
+
+        # Average loss across the entire dataset
+        loss = totalLoss / len(x)
+
+        print(
+            "Iteration:", iterations,
+            "Loss:", loss
+        )
 
     return (
         hiddenWeights,
@@ -259,6 +278,24 @@ def initializeNetwork(inputSize, hiddenSize, outputSize):
     return (hiddenWeights, hiddenBiases, 
             outputWeights, outputBiases)
 
+def test(inputs, outputs,
+         hiddenWeights, hiddenBiases,
+         outputWeights, outputBiases):
+    correct = 0
+    for i in range(len(inputs)):
+        probabilities = predict(
+            inputs[i],
+            hiddenWeights,
+            hiddenBiases,
+            outputWeights,
+            outputBiases
+        )
+        predictedClass = probabilities.index(max(probabilities))
+        if predictedClass == outputs[i]:
+            correct += 1
+
+    return (f"Accuracy: {correct}/{len(inputs)} ({correct / len(inputs) * 100:.2f}%)")
+
 # MAIN / DATA
 (hiddenWeights, 
  hiddenBiases, 
@@ -276,59 +313,26 @@ hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = tra
     hiddenWeights, hiddenBiases,
     outputWeights, outputBiases,
     lr=0.01,
-    maxIterations=20
-)
+    maxIterations = 20,
+    batchSize = 10
+    )
 
 print("\nTraining complete!")
 print("Final loss:", loss)
 print("Iterations:", iterations)
 
 # TEST
-probabilities = predict(
-        x[0],
-        hiddenWeights,
-        hiddenBiases,
-        outputWeights,
-        outputBiases
-    )
-predictedClass = probabilities.index(max(probabilities))
-
-print(
-    #"Input:", x[0],
-    "Target:", y[0],
-    "Probabilities:", probabilities,
-    "Predicted class:", predictedClass
+print("Testing...")
+x_test = MINST_loader.loadImages(
+    "MINST/t10k-images.idx3-ubyte",
+    1000
 )
 
-"""
-print("\nHidden weights:", hiddenWeights)
-print("Hidden biases:", hiddenBiases)
-print("Output weights:", outputWeights)
-print("Output biases:", outputBiases)
-
-
-# TEST TRAINING EXAMPLES
-print("\nPredictions:")
-
-for i in range(len(x)):
-    probabilities = predict(
-        x[i],
-        hiddenWeights,
-        hiddenBiases,
-        outputWeights,
-        outputBiases
-    )
-
-    predictedClass = probabilities.index(max(probabilities))
-
-    print(
-        "Input:", x[i],
-        "Target:", y[i],
-        "Probabilities:", probabilities,
-        "Predicted class:", predictedClass
-    )
-
-
-# TEST NEW INPUT
-"""
+y_test = MINST_loader.loadLabels(
+    "MINST/t10k-labels.idx1-ubyte",
+    1000
+)
+print(test(x_test, y_test, 
+         hiddenWeights,hiddenBiases,
+         outputWeights,outputBiases))
 
