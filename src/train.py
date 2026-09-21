@@ -1,7 +1,7 @@
 import math
 import random
 import MINST_loader
-import src.test as test
+import test
 import json
 import time
 
@@ -299,8 +299,8 @@ def main():
 
     # Training data
     numData = 5000
-    x = MINST_loader.loadImages("MINST/train-images.idx3-ubyte", numData)
-    y = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte", numData)
+    x = MINST_loader.loadImages("src/MINST/train-images.idx3-ubyte", numData)
+    y = MINST_loader.loadLabels("src/MINST/train-labels.idx1-ubyte", numData)
 
     # TRAIN
     lr = 0.10

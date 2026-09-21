@@ -1,6 +1,6 @@
 import MINST_loader
 import json
-import src.train as train
+import train 
 
 def loadWeights(filePath):
     with open(filePath, "r") as file:
@@ -37,11 +37,11 @@ def test(testSize,
          outputWeights, outputBiases, useTestset = True):
     
     x_test = MINST_loader.loadImages(
-        'MINST/t10k-images.idx3-ubyte' if useTestset else 'MINST/train-images.idx3-ubyte',
+        'src/MINST/t10k-images.idx3-ubyte' if useTestset else 'src/MINST/train-images.idx3-ubyte',
         testSize
     )
     y_test = MINST_loader.loadLabels(
-        'MINST/t10k-labels.idx1-ubyte' if useTestset else 'MINST/train-labels.idx1-ubyte',
+        'src/MINST/t10k-labels.idx1-ubyte' if useTestset else 'src/MINST/train-labels.idx1-ubyte',
         testSize
     )
     correct = 0
@@ -61,13 +61,13 @@ def test(testSize,
     return accuracy
 
 def main():
-    (hiddenWeights, hiddenBiases, outputWeights, outputBiases) = loadWeights("model/weights.json")
+    (hiddenWeights, hiddenBiases, outputWeights, outputBiases) = loadWeights("src/model/weights.json")
     x_test = MINST_loader.loadImages(
-        "MINST/t10k-images.idx3-ubyte",
+        "src/MINST/t10k-images.idx3-ubyte",
         5000
     )
     y_test = MINST_loader.loadLabels(
-        "MINST/t10k-labels.idx1-ubyte",
+        "src/MINST/t10k-labels.idx1-ubyte",
         5000
     )
     accuracy = test_withLoadedData(x_test, y_test, hiddenWeights, hiddenBiases, outputWeights, outputBiases)
