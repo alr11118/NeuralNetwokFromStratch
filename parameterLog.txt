@@ -1,0 +1,143 @@
+####################
+RESAULTS
+Final loss: 0.2802823770379455
+Training time: -47.97971545893233
+Accuracy 0.7764
+PARAMETERS
+Training Size: 500
+Batch Size: 10
+Learning Rate: 0.01
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.13022341652333566
+Training time: -45.53240808402188
+Accuracy 0.8008
+PARAMETERS
+Training Size: 500
+Batch Size: 10
+Learning Rate: 0.02
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.07367802605323534
+Training time: -45.488418792025186
+Accuracy 0.7974
+PARAMETERS
+Training Size: 500
+Batch Size: 10
+Learning Rate: 0.03
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.04929288312598975
+Training time: -45.686765374965034
+Accuracy 0.8038
+PARAMETERS
+Training Size: 500
+Batch Size: 10
+Learning Rate: 0.04
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.03171407994287769
+Training time: -46.21592474996578
+Accuracy 0.805
+PARAMETERS
+Training Size: 500
+Batch Size: 10
+Learning Rate: 0.05
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.0065761389228661616
+Training time: 44.56841074989643
+Accuracy 0.8132
+PARAMETERS
+Training Size: 500
+Batch Size: 10
+Learning Rate: 0.15
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.03635249969357249
+Training time: 45.13761712505948
+Accuracy 0.9112
+PARAMETERS
+Training Size: 1000
+Batch Size: 10
+Learning Rate: 0.1
+Iterations: 10
+####################
+
+####################
+RESAULTS
+Final loss: 0.0157372271045835
+Training time: 66.70690925000235
+Accuracy 0.9172
+PARAMETERS
+Training Size: 1000
+Batch Size: 10
+Learning Rate: 0.1
+Iterations: 15
+####################
+
+####################
+RESAULTS
+Final loss: 0.009438228527924076
+Training time: 90.099760250072
+Accuracy 0.9126
+PARAMETERS
+Training Size: 1000
+Batch Size: 10
+Learning Rate: 0.1
+Iterations: 20
+####################
+
+####################
+RESAULTS
+Final loss: 0.0157372271045835
+Training time: 66.70690925000235
+Accuracy 0.9172
+PARAMETERS
+Training Size: 1000
+Batch Size: 10
+Learning Rate: 0.1
+Iterations: 15
+####################
+
+####################
+RESAULTS
+Final loss: 0.011458639314566156
+Training time: 135.85880924994126
+Accuracy 0.9518
+PARAMETERS
+Training Size: 2000
+Batch Size: 10
+Learning Rate: 0.1
+Iterations: 15
+####################
+
+####################
+RESAULTS
+Final loss: 0.007298405493316789
+Training time: 344.3988567920169
+Accuracy 1.0
+PARAMETERS
+Training Size: 5000
+Batch Size: 10
+Learning Rate: 0.1
+Iterations: 15
+####################

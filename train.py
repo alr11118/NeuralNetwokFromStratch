@@ -1,7 +1,9 @@
 import math
 import random
 import MINST_loader
+import test
 import json
+import time
 
 # ACTIVATION FUNCTIONS
 def relu(x):
@@ -230,10 +232,7 @@ def train(x, y,
         # Average loss across the entire dataset
         loss = totalLoss / len(x)
 
-        print(
-            "Iteration:", iterations,
-            "Loss:", loss
-        )
+        print("Iteration:", iterations, "Loss:", loss)
 
     return (
         hiddenWeights,
@@ -259,6 +258,7 @@ def predict(input,
     return probabilities
 
 def initializeNetwork(inputSize, hiddenSize, outputSize):
+    random.seed(42)
     # Example: initializeNetwork(784, 64, 10)
     # 64 Hidden Neurans with 784 inputs each
     # Using Kaiming Initialization for optimization
@@ -298,23 +298,39 @@ def main():
     outputBiases) = initializeNetwork(784, 64, 10)
 
     # Training data
-    numData = 500
+    numData = 5000
     x = MINST_loader.loadImages("MINST/train-images.idx3-ubyte", numData)
     y = MINST_loader.loadLabels("MINST/train-labels.idx1-ubyte", numData)
 
     # TRAIN
+    lr = 0.10
+    maxIterations = 15
+    batchSize = 10
+    start_time = time.perf_counter()
     hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = train(
         x, y,
         hiddenWeights, hiddenBiases,
         outputWeights, outputBiases,
-        lr=0.01,
-        maxIterations = 20,
-        batchSize = 10
+        lr,
+        maxIterations,
+        batchSize
         )
+    end_time = time.perf_counter()
+    total_time = end_time - start_time
+    accuracy = test.test(5000, hiddenWeights, hiddenBiases, outputWeights, outputBiases, False)
 
-    print("\nTraining complete!")
+    print("\n####################")
+    print("RESAULTS")
     print("Final loss:", loss)
+    print("Training time:", total_time)
+    print("Accuracy", accuracy)
+
+    print("PARAMETERS")
+    print("Training Size:", numData)
+    print("Batch Size:", batchSize)
+    print("Learning Rate:", lr)
     print("Iterations:", iterations)
+    print("####################")
 
     saveWeights("model/weights.json", hiddenWeights, hiddenBiases, outputWeights, outputBiases)
     print("Weights saved")
