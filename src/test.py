@@ -1,6 +1,6 @@
 import MINST_loader
 import json
-import train
+import src.train as train
 
 def loadWeights(filePath):
     with open(filePath, "r") as file:
