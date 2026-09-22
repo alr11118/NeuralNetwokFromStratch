@@ -10,13 +10,6 @@ def loadImages(filename, batchSize = 0):
     if(batchSize == 0):
         batchSize = numImages
 
-    """
-    print(magic)
-    print(numImages)
-    print(numRows)
-    print(numColumns)
-    """
-
     images = []
     for imageIndex in range(batchSize):
         image = []
@@ -26,9 +19,6 @@ def loadImages(filename, batchSize = 0):
             image.append(value)
         images.append(image)
     return images
-
-# Example Usage:
-#images = loadImages("MINST/train-images.idx3-ubyte")
 
 def loadLabels(filename, batchSize = 0):
     with open(filename, "rb") as file:
@@ -40,17 +30,9 @@ def loadLabels(filename, batchSize = 0):
     if(batchSize == 0):
         batchSize = numLabels
 
-    """
-    print("Magic:", magic)
-    print("Number of labels:", numLabels)
-    """
-
     labels = []
     for labelIndex in range(batchSize):
         index = 8 + labelIndex
         value = data[index]
         labels.append(value)
     return labels
-
-# Example Usage:
-#labels = loadLabels("MINST/train-labels.idx1-ubyte")

@@ -1,7 +1,7 @@
 import math
 import random
-import MINST_loader
-import test
+from . import MINST_loader
+from . import test
 import json
 import time
 
@@ -243,20 +243,6 @@ def train(x, y,
         iterations
     )
 
-def predict(input, 
-            hiddenWeights,
-            hiddenBiases,
-            outputWeights,
-            outputBiases):
-    probabilities, _, _ = forwardPass(
-        input,
-        hiddenWeights,
-        hiddenBiases,
-        outputWeights,
-        outputBiases
-    )
-    return probabilities
-
 def initializeNetwork(inputSize, hiddenSize, outputSize):
     random.seed(42)
     # Example: initializeNetwork(784, 64, 10)
@@ -299,8 +285,8 @@ def main():
 
     # Training data
     numData = 5000
-    x = MINST_loader.loadImages("src/MINST/train-images.idx3-ubyte", numData)
-    y = MINST_loader.loadLabels("src/MINST/train-labels.idx1-ubyte", numData)
+    x = MINST_loader.loadImages("data/train-images.idx3-ubyte", numData)
+    y = MINST_loader.loadLabels("data/train-labels.idx1-ubyte", numData)
 
     # TRAIN
     lr = 0.10

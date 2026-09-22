@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+src/digitReader/MINST_loader.py
+src/digitReader/__init__.py
+src/digitReader/__main__.py
+src/digitReader/cli.py
+src/digitReader/model.py
+src/digitReader/test.py
+src/digitReader/train.py
+src/digitReader/weightLoader.py
+src/digitReader.egg-info/PKG-INFO
+src/digitReader.egg-info/SOURCES.txt
+src/digitReader.egg-info/dependency_links.txt
+src/digitReader.egg-info/entry_points.txt
+src/digitReader.egg-info/requires.txt
+src/digitReader.egg-info/top_level.txt

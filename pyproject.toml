@@ -1,0 +1,15 @@
+[project]
+name = "digitReader"
+version = "0.1.0"
+description = "A digit classifier that useas a neura network without using any machine learning libraries"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Alara Engin" }
+]
+dependencies = [
+    "opencv-python"
+]
+
+[project.scripts]
+classifyDigit = "digitReader.cli:main"

@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: digitReader
+Version: 0.1.0
+Summary: A digit classifier that useas a neura network without using any machine learning libraries
+Author: Alara Engin
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: opencv-python
+Dynamic: license-file
+
+# NeuralNetwokFromStratch
+this project will be able to classify imeges of hand written digits using a neural network create from strach by a command line tool. The input image will be resized and divied into input nodes than tge probobility of each output node will be displayed.
