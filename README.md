@@ -27,6 +27,18 @@ Softmax
        ↓
 Predicted digit (0–90
 ```
+## Installation
+
+Install digitReader directly from PyPI: https://pypi.org/project/digitReader/0.1.0/#description 
+
+```bash
+python3 -m pip install digitReader
+```
+To Run:
+```bash
+classifyDigit --image image.jpeg
+```
+Supported image files: .jpg, .jpeg, .png
 
 ## Why I Built This:
 
