@@ -7,9 +7,19 @@ def readImage(filePath):
 
     if image is None:
         print(f"Error: Could not load image from {filePath}")
-    else:
-        resized_image = cv2.resize(image, (28, 28), interpolation=cv2.INTER_LINEAR)
-        pixel_matrix = resized_image.flatten().tolist()
+        return None
+
+    resized_image = cv2.resize(
+        image,
+        (28, 28),
+        interpolation=cv2.INTER_LINEAR
+    )
+
+    pixel_matrix = resized_image.flatten().tolist()
+
+    # Normalize pixels to the same range used during training
+    pixel_matrix = [pixel / 255 for pixel in pixel_matrix]
+
     return pixel_matrix
 
 def main():
