@@ -9,13 +9,11 @@ The goal of this project was to understand how neural networks actually work by 
 This project implements a neural network that takes a 28×28 grayscale handwritten digit image as input and predicts which digit it is (0–9).
 
 Each MNIST image contains:
-
 - 28 × 28 pixels
 - 784 input values
 - Pixel values normalized from 0–255 to 0–1
 
 The network architecture:
-
 ```text
 784 input pixels
        ↓
@@ -30,7 +28,7 @@ Softmax
 Predicted digit (0–90
 ```
 
-### Why I Built This:
+## Why I Built This:
 
 I wanted to understand neural networks from the inside to better optimise/train my future neural networks.
 
@@ -49,44 +47,32 @@ I implemented components such as:
 
 The project started with much smaller networks such as linear regression and gradually developed into the MNIST classifier.
 
-### How the Neural Network Works
-1. Input
+## How the Neural Network Works
+1. **Input**
+<p>Each handwritten digit is a 28×28 image.<br>
+The image is flattened containing 784 pixel values:<br>
+[0.0, 0.0, 0.12, 0.54, ..., 0.0]<br>
 
-Each handwritten digit is a 28×28 image.
+The original pixel values range from 0 to 255, so I normalize them:<br>
+normalized_pixel = pixel / 255<br>
+This gives values between 0 and 1</p>
 
-The image is flattened containing 784 pixel values:
+2. **Hidden Layer**
+<p>Each hidden neuron calculates a weighted sum of the inputs:<br>
+z = x₁w₁ + x₂w₂ + ... + x₇₈₄w₇₈₄ + b<br>
 
-[0.0, 0.0, 0.12, 0.54, ..., 0.0]
+The result is passed through the ReLU activation function:<br>
+ReLU(z) = max(0, z)<br>
 
-The original pixel values range from 0 to 255, so I normalize them:
+This allows the network to learn nonlinear patterns.</p>
 
-normalized_pixel = pixel / 255
+3. **Output Layer**
+<p>The hidden-layer outputs are connected to 10 output neurons.<br>
+Each output neuron corresponds to one digit:<br>
+0 1 2 3 4 5 6 7 8 9<br>
 
-This gives values between 0 and 1.
-
-2. Hidden Layer
-
-Each hidden neuron calculates a weighted sum of the inputs:
-
-z = x₁w₁ + x₂w₂ + ... + x₇₈₄w₇₈₄ + b
-
-The result is passed through the ReLU activation function:
-
-ReLU(z) = max(0, z)
-
-This allows the network to learn nonlinear patterns.
-
-3. Output Layer
-
-The hidden-layer outputs are connected to 10 output neurons.
-
-Each output neuron corresponds to one digit:
-
-0 1 2 3 4 5 6 7 8 9
-
-The output neurons first produce raw scores.
-
-These scores are passed through the softmax function to convert them into probabilities.
+The output neurons first produce raw scores.<br>
+These scores are passed through the softmax function to convert them into probabilities.</p>
 
 For example:
 ```
@@ -103,35 +89,26 @@ For example:
 ```
 The predicted digit is the class with the highest probability.
 
-#### Training
+4. **Training**
+<p>The network learns by comparing its prediction with the correct label.<br>
+I use cross-entropy loss:<br>
+Loss = -log(probability of the correct class)<br>
 
-The network learns by comparing its prediction with the correct label.
+If the network assigns a high probability to the correct digit, the loss is small.<br>
+If it assigns a low probability to the correct digit, the loss is large.</p>
 
-I use cross-entropy loss:
+5. **Backpropagation**
+<p>After calculating the loss, the network calculates gradients for its weights and biases.<br>
+The gradients tell the network how each parameter contributed to the error.<br>
+The parameters are then updated using gradient descent:<br>
+parameter = parameter - learning_rate × gradient<br>
 
-Loss = -log(probability of the correct class)
+I implemented these gradient calculations manually rather than using an automatic differentiation library.</p>
 
-If the network assigns a high probability to the correct digit, the loss is small.
+6. **Mini-Batch Training**
+<p>Instead of calculating an update using the entire dataset at once, the network uses mini-batches.<br>
 
-If it assigns a low probability to the correct digit, the loss is large.
-
-#### Backpropagation
-
-After calculating the loss, the network calculates gradients for its weights and biases.
-
-The gradients tell the network how each parameter contributed to the error.
-
-The parameters are then updated using gradient descent:
-
-parameter = parameter - learning_rate × gradient
-
-I implemented these gradient calculations manually rather than using an automatic differentiation library.
-
-#### Mini-Batch Training
-
-Instead of calculating an update using the entire dataset at once, the network uses mini-batches.
-
-For example:
+For example:<br>
 
 Training data
      ↓
@@ -140,45 +117,38 @@ Training data
 [batch 3]
 ...
      ↓
-Update weights after each batch
+Update weights after each batch<br>
 
-The current experiments use a batch size of 10.
+The current experiments use a batch size of 10.<br>
 
-The training data is shuffled between iterations so that the network does not always see the examples in the same order.
+The training data is shuffled between iterations so that the network does not always see the examples in the same order.</p>
 
-#### MNIST Data
+7. **MNIST Data**
+<p>The MNIST dataset is stored in IDX binary files.<br>
+Rather than using a library to load the dataset, I wrote my own loader for the binary format.<br>
+The image file contains:<br>
+- Magic number
+- Number of images
+- Number of rows
+- Number of columns
+- Pixel data
 
-The MNIST dataset is stored in IDX binary files.
+The label file contains:<br>
+- Magic number
+- Number of labels
+- Label data
+The loader converts these binary files into Python lists that can be passed directly to the neural network.</p>
 
-Rather than using a library to load the dataset, I wrote my own loader for the binary format.
+## Current Results
+Final loss: 0.007298405493316789\
+Training time: 344.3988567920169\
+Accuracy 1.0\
+Training Size: 5000\
+Batch Size: 10\
+Learning Rate: 0.1\
+Iterations: 15\
 
-The image file contains:
-
-Magic number
-Number of images
-Number of rows
-Number of columns
-Pixel data
-
-The label file contains:
-
-Magic number
-Number of labels
-Label data
-
-The loader converts these binary files into Python lists that can be passed directly to the neural network.
-
-### Current Results
-Training examples: 1,000
-Hidden neurons:    64
-Batch size:        10
-Learning rate:     0.1
-Iterations:        15
-
-Training loss: 0.0157
-Accuracy:      91.72%
-
-### What I Learned
+## What I Learned
 - Multiple neurons combine to form a layer
 - Softmax converts output scores into probabilities
 - Cross-entropy measures classification error
@@ -188,7 +158,7 @@ Accuracy:      91.72%
 - Learning rate affects how quickly the model learns
 - Model weights can be saved and reused for inference
 
-### Limitations
+## Limitations
 
 This project is intentionally implemented using basic Python data structures and loops instead of optimized numerical libraries.
 
@@ -198,7 +168,7 @@ The current experiments also use a relatively small subset of MNIST compared wit
 
 These limitations are intentional because the main goal of the project is to understand the underlying mechanics of neural networks.
 
-### Future Improvements
+## Future Improvements
 
 Possible improvements include:
 + Train on more of the MNIST dataset
@@ -208,13 +178,5 @@ Possible improvements include:
 + Add a graphical interface for drawing digits
 + Compare the implementation against a NumPy-based version
 
-### Current Resaults
-
-```text
-| Training Size | Batch Size | LR | Iterations | Accuracy |
-|---------------|------------|----|------------|----------|
-| 1,000         | 10         | .1 | 10         | 91.12%   |
-| 1,000         | 10         | .1 | 15         | 91.72%   |
-| 1,000         | 10         | .1 | 20         | 91.26%   |
-| ...           | ...        | ...| ...        | ...      |
-```
+## License
+MIT License
