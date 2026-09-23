@@ -13,3 +13,6 @@ dependencies = [
 
 [project.scripts]
 classifyDigit = "digitReader.cli:main"
+
+[tool.setuptools.package-data]
+digitReader = ["weights.json"]

@@ -9,6 +9,7 @@ src/digitReader/model.py
 src/digitReader/test.py
 src/digitReader/train.py
 src/digitReader/weightLoader.py
+src/digitReader/weights.json
 src/digitReader.egg-info/PKG-INFO
 src/digitReader.egg-info/SOURCES.txt
 src/digitReader.egg-info/dependency_links.txt

@@ -3,7 +3,7 @@ from . import weightLoader
 
 def predict(input):
     
-    (hiddenWeights, hiddenBiases, outputWeights,outputBiases) = weightLoader.loadWeights("model/weights.json")
+    (hiddenWeights, hiddenBiases, outputWeights,outputBiases) = weightLoader.loadWeights("weights.json")
     probabilities, _, _ = train.forwardPass(
         input,
         hiddenWeights,
