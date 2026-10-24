@@ -1,16 +1,19 @@
 import pygame
 import cv2
-import model
+try:
+    from . import model
+except ImportError:
+    import model
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((600, 600))
     pygame.display.set_caption("Draw a Digit (0-9)!")
 
-    BLACK = (255, 255, 255)
-    WHITE = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
 
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     drawing = False
     last_position = None
 
@@ -26,11 +29,11 @@ def main():
                 if event.button == 1:  # Left mouse button
                     drawing = True
                     last_position = event.pos
-                    pygame.draw.circle(screen, BLACK, event.pos, 20)
+                    pygame.draw.circle(screen, WHITE, event.pos, 20)
 
             elif event.type == pygame.MOUSEMOTION and drawing:
                 pygame.draw.line(
-                    screen, BLACK, last_position, event.pos, 40
+                    screen, WHITE, last_position, event.pos, 40
                 )
                 last_position = event.pos
 
@@ -49,7 +52,7 @@ def main():
                 elif event.key == pygame.K_d:
                     pygame.image.save(screen, "user_drawing.png")
                     print("Image saved as user_drawing.png!")
-                    screen.fill(WHITE)
+                    screen.fill(BLACK)
                     number = predict("user_drawing.png")
 
         pygame.display.flip()
