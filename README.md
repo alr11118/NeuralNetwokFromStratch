@@ -27,18 +27,38 @@ Softmax
        ↓
 Predicted digit (0–90
 ```
-## Installation
+## Demo
 
-Install digitReader directly from PyPI: https://pypi.org/project/digitReader/0.1.0/#description 
-
+Clone this github repo:
 ```bash
-python3 -m pip install digitReader
+git
 ```
-To Run:
+
+Install dependencies:
 ```bash
-classifyDigit --image image.jpeg
+depe
+```
+
+To run drawing GUI:
+```bash
+python3 src/gui.py
+```
+
+To Run CLI version to plug in an image:
+```bash
+python3 src/cli.py -i imageFile.png
 ```
 Supported image files: .jpg, .jpeg, .png
+
+To Run Training:
+```bash
+python3 src/train.py
+```
+
+To Run Testing Only
+```bash
+python3 src/test.py
+```
 
 ## Why I Built This:
 
@@ -158,7 +178,7 @@ Accuracy 1.0\
 Training Size: 5000\
 Batch Size: 10\
 Learning Rate: 0.1\
-Iterations: 15\
+Iterations: 15
 
 ## What I Learned
 - Multiple neurons combine to form a layer
