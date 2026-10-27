@@ -1,8 +1,9 @@
 import json
-from importlib.resources import files
+from pathlib import Path
+
 
 def loadWeights():
-    weightsPath = files("digitReader").joinpath("weights.json")
+    weightsPath = Path("model/weights.json")
 
     with weightsPath.open("r", encoding="utf-8") as file:
         data = json.load(file)

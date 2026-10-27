@@ -1,6 +1,6 @@
 import argparse
 import cv2
-from . import model
+import model
 
 def readImage(filePath):
     image = cv2.imread(filePath, cv2.IMREAD_GRAYSCALE)

@@ -1,6 +1,4 @@
-#from . import train
 import train
-#from . import weightLoader
 import weightLoader
 
 def predict(input):

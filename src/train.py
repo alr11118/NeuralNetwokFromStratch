@@ -1,8 +1,6 @@
 import math
 import random
-#from . import MINST_loader
 import MINST_loader
-#from . import test
 import test
 import json
 import time
@@ -294,6 +292,7 @@ def main():
     lr = 0.10
     maxIterations = 15
     batchSize = 10
+    print("Starting training... ")
     start_time = time.perf_counter()
     hiddenWeights, hiddenBiases, outputWeights, outputBiases, loss, iterations = train(
         x, y,
@@ -305,13 +304,16 @@ def main():
         )
     end_time = time.perf_counter()
     total_time = end_time - start_time
-    accuracy = test.test(5000, hiddenWeights, hiddenBiases, outputWeights, outputBiases, False)
+    saveWeights("model/weights.json", hiddenWeights, hiddenBiases, outputWeights, outputBiases)
+    training_accuracy = test.test(5000, False)
+    test_accuracy = test.test(5000)
 
     print("\n####################")
     print("RESAULTS")
     print("Final loss:", loss)
     print("Training time:", total_time)
-    print("Accuracy", accuracy)
+    print("Training Set Accuracy", training_accuracy)
+    print("Testing Set Accuracy", test_accuracy)
 
     print("PARAMETERS")
     print("Training Size:", numData)
@@ -319,9 +321,6 @@ def main():
     print("Learning Rate:", lr)
     print("Iterations:", iterations)
     print("####################")
-
-    saveWeights("model/weights.json", hiddenWeights, hiddenBiases, outputWeights, outputBiases)
-    print("Weights saved")
 
 if(__name__ == "__main__"):
     main()

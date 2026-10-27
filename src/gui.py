@@ -1,6 +1,5 @@
 import pygame
 import cv2
-#from . import model
 import model
 
 def main():
