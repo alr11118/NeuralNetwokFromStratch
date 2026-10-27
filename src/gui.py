@@ -10,7 +10,7 @@ def main():
     HEIGHT = 600 
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Draw a Digit (0-9)!")
+    pygame.display.set_caption("Draw a Digit (0-9)! | MANUAL: s: save, c: clear, d: get prediction")
 
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
@@ -53,17 +53,16 @@ def main():
 
             elif event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_s:
-                                pygame.image.save(screen, "user_drawing.png")
-                                print("Image saved as user_drawing.png!")
+                                pygame.image.save(screen, "drawings/user_drawing.png")
+                                print("Image saved as drawings/user_drawing.png!")
             
                             elif event.key == pygame.K_c:
-                                screen.fill(WHITE)
+                                screen.fill(BLACK)
             
                             elif event.key == pygame.K_d:
-                                pygame.image.save(screen, "user_drawing.png")
-                                print("Image saved as user_drawing.png!")
-                                screen.fill(BLACK)
-                                number = predict("user_drawing.png")
+                                pygame.image.save(screen, "drawings/user_drawing.png")
+                                print("Image saved as drawings/user_drawing.png!")
+                                number = predict("drawings/user_drawing.png")
 
 
         pygame.display.flip()
@@ -84,7 +83,7 @@ def readImage(filePath):
         (28, 28),
         interpolation=cv2.INTER_LINEAR
     )
-    cv2.imwrite("output_image.jpg", resized_image)
+    cv2.imwrite("drawings/output_image.jpg", resized_image)
 
     pixel_matrix = resized_image.flatten().tolist()
 
