@@ -31,12 +31,12 @@ Predicted digit (0–90
 
 Clone this github repo:
 ```bash
-git
+git clone -b source-code https://github.com/alr11118/NeuralNetwokFromStratch.git
 ```
 
 Install dependencies:
 ```bash
-depe
+pip install -r requirements.txt
 ```
 
 To run drawing GUI:
