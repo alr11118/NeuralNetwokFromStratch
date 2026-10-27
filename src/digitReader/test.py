@@ -1,5 +1,7 @@
-from . import MINST_loader
-from . import model 
+#from . import MINST_loader
+import MINST_loader
+#from . import model 
+import model 
 
 def test_withLoadedData(inputs, outputs):
     correct = 0

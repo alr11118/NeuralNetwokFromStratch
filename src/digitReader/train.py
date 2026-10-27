@@ -1,7 +1,9 @@
 import math
 import random
-from . import MINST_loader
-from . import test
+#from . import MINST_loader
+import MINST_loader
+#from . import test
+import test
 import json
 import time
 
