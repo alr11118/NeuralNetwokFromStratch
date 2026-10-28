@@ -1,5 +1,5 @@
-import train
-import weightLoader
+from . import train
+from . import weightLoader
 
 def predict(input):
     

@@ -1,6 +1,14 @@
 import pygame
 import cv2
 import model
+from pathlib import Path
+
+DRAWINGS_DIR = Path.home() / "DigitReader" / "drawings"
+DRAWINGS_DIR.mkdir(parents=True, exist_ok=True)
+
+USER_DRAWING = DRAWINGS_DIR / "user_drawing.png"
+OUTPUT_IMAGE = DRAWINGS_DIR / "output_image.jpg"
+
 
 def main():
     # Initialize Pygame
@@ -43,7 +51,6 @@ def main():
                     drawing = False
                     last_pos = None
 
-            # Mouse motion: draw line or circle from last position to current
             elif event.type == pygame.MOUSEMOTION:
                 if drawing:
                     current_pos = event.pos
@@ -53,16 +60,22 @@ def main():
 
             elif event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_s:
-                                pygame.image.save(screen, "drawings/user_drawing.png")
-                                print("Image saved as drawings/user_drawing.png!")
+                                pygame.image.save(screen, str(USER_DRAWING))
             
                             elif event.key == pygame.K_c:
                                 screen.fill(BLACK)
             
                             elif event.key == pygame.K_d:
-                                pygame.image.save(screen, "drawings/user_drawing.png")
-                                print("Image saved as drawings/user_drawing.png!")
-                                number = predict("drawings/user_drawing.png")
+                                pygame.image.save(screen, str(USER_DRAWING))
+                                number = predict(str(USER_DRAWING))
+                                screen.fill(BLACK)
+                                my_font = pygame.font.Font(None, 50)
+                                text_surface = my_font.render("Predicted Digit: "+str(number), True, (255, 255, 255))
+                                screen.blit(text_surface, (50, 50))
+                                pygame.display.flip()
+                                pygame.event.pump()
+                                pygame.time.wait(3000)
+                                screen.fill(BLACK)
 
 
         pygame.display.flip()
@@ -75,7 +88,7 @@ def readImage(filePath):
     image = cv2.imread(filePath, cv2.IMREAD_GRAYSCALE)
 
     if image is None:
-        print(f"Error: Could not load image from {filePath}")
+        #print(f"Error: Could not load image from {filePath}")
         return None
 
     resized_image = cv2.resize(
@@ -83,7 +96,7 @@ def readImage(filePath):
         (28, 28),
         interpolation=cv2.INTER_LINEAR
     )
-    cv2.imwrite("drawings/output_image.jpg", resized_image)
+    cv2.imwrite(str(OUTPUT_IMAGE), resized_image)
 
     pixel_matrix = resized_image.flatten().tolist()
 
@@ -97,7 +110,8 @@ def predict(filename):
     if pixel_matrix is None:
         return 1
     prediction = model.predict(pixel_matrix)
-    print("Predicted Number:", prediction)
+    #("Predicted Number:", prediction)
+    return prediction
 
 if __name__ == "__main__":
      main()
