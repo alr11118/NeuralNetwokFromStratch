@@ -35,6 +35,10 @@ Clone this github repo:
 ```bash
 git clone -b source-code https://github.com/alr11118/NeuralNetwokFromStratch.git
 ```
+Go into the folder:
+```bash
+cd NeuralNetwokFromStratch
+```
 
 Install dependencies:
 ```bash
