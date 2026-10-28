@@ -1,5 +1,7 @@
 # Neural Network From Scratch
+
 Video Demo: https://youtu.be/PygLbfFHhzQ
+
 Description: A neural network built entirely from scratch in Python to recognize handwritten digits from the MNIST dataset.
 
 The goal of this project was to understand how neural networks actually work by implementing the mathematics and training process myself, without using machine-learning frameworks such as TensorFlow or PyTorch.
